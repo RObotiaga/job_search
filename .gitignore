@@ -40,5 +40,5 @@ pip-wheel-metadata
 
 poetry/core/*
 
-./vacancies.json
-./poetry.lock
+vacancies.json
+poetry.lock
