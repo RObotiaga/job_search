@@ -1,8 +1,9 @@
 import requests
+import os
 from src.vacancy import Vacancy
 from abc import ABC, abstractmethod
 
-SUPERJOB_API_KEY = 'v3.r.137656450.c798456d252730a709d481ad7c184eaac5d7d611.4feb55d03aeb632f4c09fd758dd99b72a2e5c060'
+SUPERJOB_API_KEY = os.environ.get('SUPERJOB_API_KEY')
 headers = {'X-Api-App-Id': SUPERJOB_API_KEY}
 
 
