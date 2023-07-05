@@ -99,9 +99,9 @@ class JSONVacancyFileManager(VacancyFileManager):
         vacancies = self.load_vacancies_from_file()
         filtered_vacancies = []
         for vacancy in vacancies:
-            title = vacancy['title']
-            description = vacancy['description']
-            if vacancy['salary'] >= salary and all(
-                    keyword in title.lower() or keyword in description.lower() for keyword in keywords):
+            vacancy_salary = vacancy['salary']
+            title = vacancy['title'].lower()
+            description = vacancy['description'].lower()
+            if vacancy_salary > salary-1 and all(keyword.lower() in title or keyword.lower() in description for keyword in keywords):
                 filtered_vacancies.append(Vacancy.from_dict(vacancy))
         return filtered_vacancies
