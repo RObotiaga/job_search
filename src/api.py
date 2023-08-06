@@ -2,6 +2,7 @@ import requests
 import os
 from src.vacancy import Vacancy
 from abc import ABC, abstractmethod
+from src.employer import Employer
 
 SUPERJOB_API_KEY = os.environ.get('SUPERJOB_API_KEY')
 headers = {'X-Api-App-Id': SUPERJOB_API_KEY}
@@ -132,3 +133,26 @@ class HeadHunterAPI(API):
                                          'text': keywords, 'per_page': word_count}).json()
         vacancies_list.extend([self.get_vacancy_by_id(i['id']) for i in vacancies['items']])
         return vacancies_list
+
+    def get_all_employers_vacancy(self, employer_id):
+        response = requests.get(f'https://api.hh.ru/vacancies?employer_id={employer_id}',
+                                params={'area': 113, 'only_with_salary': True, 'per_page': 100}).json()
+        return [self.get_vacancy_by_id(i['id']) for i in response['items']]
+
+    def get_employers_list(self, name):
+        response = requests.get(f'https://api.hh.ru/employers',
+                                params={'area': 113, 'text': name,
+                                        'per_page': 100, 'only_with_vacancies': True}).json()
+        return [self.get_employer_info(i['id']) for i in response['items']]
+
+    @staticmethod
+    def get_employer_info(employer_id):
+        response = requests.get(f'https://api.hh.ru/employers/{employer_id}').json()
+        return Employer(response['id'], response['name'], response['site_url'],
+                        response['alternate_url'], response['description'], response['vacancies_url'],
+                        response['open_vacancies'])
+
+    @staticmethod
+    def get_employer_by_vacancy_id(vacancy_id):
+        response = requests.get(f'https://api.hh.ru/vacancies/{vacancy_id}').json()
+        return response['employer']['id']

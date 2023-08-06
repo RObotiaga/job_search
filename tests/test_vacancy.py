@@ -2,6 +2,7 @@ import pytest
 from html import unescape
 from src.vacancy import Vacancy
 
+
 class TestVacancy:
     def test_format_description_removes_html_tags(self):
         text = "<p>This is a <b>bold</b> text.</p>"

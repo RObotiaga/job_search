@@ -3,7 +3,7 @@ from html import unescape
 
 
 class Vacancy:
-    def __init__(self, vacancy_id: int, url: str, title: str, salary: int, description: str, service: str):
+    def __init__(self, vacancy_id: int, url: str, title: str, salary, description: str, service: str):
         """
         Конструктор класса Vacancy.
         """
