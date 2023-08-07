@@ -3,7 +3,7 @@ from site_search import get_user_input, company_search, search_by_id, search_by_
 
 
 def hello():
-    DB = DBManager("JobSearch", "postgres", "localhost")
+    DB = DBManager("jobsearch", "postgres", "localhost")
     choose_mode = input('Выберите режим:\nБД - Работа с БД    ХХ - Работа с HeadHunter\n')
     if choose_mode.upper() == 'ХХ':
         search_vacancy_hh(DB)
@@ -39,7 +39,7 @@ def search_in_db(DB):
             for vacancy in DB.get_vacancies_with_higher_salary():
                 print(f'Компания:{vacancy[0]}\n{vacancy[1]}\nЗ/П: {vacancy[2]}\nURL: {vacancy[3]}')
         elif choose_command == 6:
-            break
+            hello()
 
 
 def search_vacancy_hh(DB):

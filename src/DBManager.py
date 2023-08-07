@@ -2,7 +2,18 @@ import psycopg2
 import os
 
 class DBManager:
+    """
+    Класс для управления базой данных PostgreSQL.
+    """
+
     def __init__(self, dbname, user, host):
+        """
+        Инициализирует объект DBManager и устанавливает соединение с базой данных.
+
+        :param dbname: Имя базы данных.
+        :param user: Имя пользователя базы данных.
+        :param host: Хост базы данных.
+        """
         self.dbname = dbname
         self.user = user
         self.host = host
@@ -10,6 +21,9 @@ class DBManager:
         self.connect_db()
 
     def connect_db(self):
+        """
+        Устанавливает соединение с базой данных.
+        """
         conn = psycopg2.connect(
             dbname=self.dbname,
             user=self.user,
@@ -19,6 +33,11 @@ class DBManager:
         self.conn = conn
 
     def add_employer(self, obj):
+        """
+        Добавляет информацию о работодателе в базу данных.
+
+        :param obj: Объект, представляющий работодателя.
+        """
         try:
             with self.conn.cursor() as cur:
                 cur.execute(
@@ -31,6 +50,12 @@ class DBManager:
             self.conn.rollback()
 
     def add_vacancy(self, vacancy, employer_id):
+        """
+        Добавляет информацию о вакансии в базу данных.
+
+        :param vacancy: Объект, представляющий вакансию.
+        :param employer_id: Идентификатор работодателя.
+        """
         try:
             with self.conn.cursor() as cur:
                 cur.execute(
@@ -43,6 +68,11 @@ class DBManager:
             self.conn.rollback()
 
     def delete_vacancy(self, vacancy_id):
+        """
+        Удаляет вакансию из базы данных по её идентификатору.
+
+        :param vacancy_id: Идентификатор вакансии.
+        """
         try:
             with self.conn.cursor() as cur:
                 cur.execute("DELETE FROM vacancies WHERE vacancy_id = %s", vacancy_id)
@@ -52,6 +82,11 @@ class DBManager:
             print(e)
 
     def get_companies_and_vacancies_count(self):
+        """
+        Возвращает список компаний с количеством вакансий.
+
+        :return: Список кортежей с информацией о компаниях и количестве их вакансий.
+        """
         try:
             with self.conn.cursor() as cur:
                 cur.execute(
@@ -67,6 +102,11 @@ class DBManager:
             return []
 
     def get_all_vacancies(self):
+        """
+        Возвращает список всех вакансий с информацией о компаниях.
+
+        :return: Список кортежей с информацией о компании и вакансии.
+        """
         try:
             with self.conn.cursor() as cur:
                 cur.execute(
@@ -82,6 +122,11 @@ class DBManager:
             return []
 
     def get_avg_salary(self):
+        """
+        Возвращает среднюю зарплату по всем вакансиям.
+
+        :return: Средняя зарплата.
+        """
         try:
             with self.conn.cursor() as cur:
                 cur.execute(
@@ -94,6 +139,11 @@ class DBManager:
             return 0
 
     def get_vacancies_with_higher_salary(self):
+        """
+        Возвращает список вакансий с зарплатой выше средней.
+
+        :return: Список вакансий с высокой зарплатой.
+        """
         higher_salary_vac = []
         avg_salary = self.get_avg_salary()
         for vacancy in self.get_all_vacancies():
@@ -102,6 +152,12 @@ class DBManager:
         return higher_salary_vac
 
     def get_vacancies_with_keyword(self, keyword):
+        """
+        Возвращает список вакансий, содержащих указанное ключевое слово.
+
+        :param keyword: Ключевое слово для поиска.
+        :return: Список вакансий, удовлетворяющих условиям поиска.
+        """
         try:
             with self.conn.cursor() as cur:
                 cur.execute(

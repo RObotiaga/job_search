@@ -37,20 +37,33 @@ def search_vacancies(platform, search_query, salary_filter, vacancies_count, DB)
 
 
 def company_search(DB):
-    employer_name = input('Введите название компании которую хотите найти на HH.ru: ')
+    """
+    Выполняет поиск компании на HeadHunter по названию и выводит информацию о ней,
+    а также список вакансий компании.
+
+    :param DB: Объект базы данных, используемый для сохранения результатов.
+    :type DB: Database
+    """
+    employer_name = input('Введите название компании, которую хотите найти на HH.ru: ')
     hh = HeadHunterAPI()
     req = hh.get_employers_list(employer_name)
     for employer in req:
         DB.add_employer(employer)
         print('=' * 25)
         print(employer)
-    employer_id = input('=' * 25 + '\nВведите id компании которая вам подходит: ')
+    employer_id = input('=' * 25 + '\nВведите id компании, которая вам подходит: ')
     for vacancy in hh.get_all_employers_vacancy(employer_id):
         DB.add_vacancy(vacancy, employer_id)
         print(vacancy)
 
 
 def search_by_id(DB):
+    """
+    Выполняет поиск вакансии на HeadHunter по id и выводит информацию о ней.
+
+    :param DB: Объект базы данных, используемый для сохранения результатов.
+    :type DB: Database
+    """
     api = HeadHunterAPI()
     get_id = input('Введите id вакансии:\n')
 
@@ -64,6 +77,12 @@ def search_by_id(DB):
 
 
 def search_by_keyword(DB):
+    """
+    Выполняет поиск вакансий на HeadHunter по ключевому слову и выводит информацию о них.
+
+    :param DB: Объект базы данных, используемый для сохранения результатов.
+    :type DB: Database
+    """
     api = HeadHunterAPI()
     keyword = input('Введите ключевое слово:\n')
 
